@@ -1048,7 +1048,13 @@ export default function App() {
                 </div>
               </form>
 
-              {shopResult && !shopResult.loading && (
+{shopResult?.error && (
+  <div className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-sm">
+    ⚠️ {shopResult.error}
+  </div>
+)}
+
+              {shopResult && !shopResult.loading && !shopResult.error && (
                 <div className="space-y-6 pt-6 border-t border-indigo-900/40">
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-[#121c35]/85 p-5 rounded-2xl border border-indigo-900/40">
                     <div>
