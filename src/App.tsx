@@ -1303,6 +1303,79 @@ export default function App() {
           </div>
         )}
 
+{activeTab === 'progress' && (
+  <section className="max-w-4xl mx-auto mt-8 p-5 bg-[#1c2d59] rounded-3xl border border-indigo-900/50 text-white space-y-5">
+    <div>
+      <h2 className="text-xl font-bold">
+        Мұғалім панелі — Диагностика
+      </h2>
+      <p className="text-slate-300 text-sm mt-2">
+        2026 жыл | Қыркүйек–қараша | 10-сынып
+      </p>
+      <p className="text-amber-300 text-xs mt-2">
+        Демонстрациялық деректер — нақты зерттеу нәтижесі емес
+      </p>
+    </div>
+
+    <div className="grid grid-cols-2 gap-3">
+      {[
+        { month: 'Қыркүйек', score: '7,2', percent: 48 },
+        { month: 'Қараша', score: '11,4', percent: 76 }
+      ].map((item) => (
+        <div key={item.month} className="bg-[#121c35] rounded-xl p-4">
+          <p className="text-slate-300 text-sm">{item.month}</p>
+          <p className="text-2xl font-bold mt-2">
+            {item.score} / 15
+          </p>
+          <div className="bg-slate-700 h-3 rounded-full mt-3 overflow-hidden">
+            <div
+              className="bg-indigo-400 h-full rounded-full"
+              style={{ width: `${item.percent}%` }}
+            />
+          </div>
+          <p className="text-sm mt-2">{item.percent}%</p>
+        </div>
+      ))}
+    </div>
+
+    <h3 className="font-semibold">Медиасауаттылық деңгейлері</h3>
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm text-left">
+        <thead>
+          <tr className="border-b border-slate-600">
+            <th className="py-2">Деңгей</th>
+            <th>Қыркүйек</th>
+            <th>Қараша</th>
+          </tr>
+        </thead>
+        <tbody>
+          {[
+            ['Төмен (0–5)', 9, 2],
+            ['Орташа (6–10)', 12, 7],
+            ['Жоғары (11–15)', 4, 16]
+          ].map(([level, sep, nov]) => (
+            <tr key={level} className="border-b border-slate-700">
+              <td className="py-3">{level}</td>
+              <td>{sep}</td>
+              <td>{nov}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <div className="bg-[#121c35] rounded-xl p-4">
+      <p className="text-slate-300 text-sm">Орташа нәтиженің өзгерісі</p>
+      <p className="text-2xl font-bold text-emerald-400 mt-1">
+        +28 пайыздық тармақ
+      </p>
+      <p className="text-slate-400 text-xs mt-2">
+        Үлгі: 25 оқушы, 15 балдық диагностика
+      </p>
+    </div>
+  </section>
+)}
+
       </main>
 
       {/* MOBILE BOTTOM NAVIGATION BAR (PWA Mobile First) */}
