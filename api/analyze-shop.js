@@ -57,7 +57,10 @@ JSON форматында жауап бер:
 `;
 
   try {
-    const response = await fetch(
+    let response;
+
+for (let attempt = 0; attempt < 3; attempt++) {
+  response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
       {
         method: "POST",
@@ -74,7 +77,16 @@ JSON форматында жауап бер:
       }
     );
 
-    
+   if (response.status !== 503 && response.status !== 429) {
+    break;
+  }
+
+  if (attempt < 2) {
+    await new Promise(resolve =>
+      setTimeout(resolve, 1000 * (attempt + 1))
+    );
+  }
+}   
 if (!response.ok) {
   const errorText = await response.text();
 
