@@ -964,11 +964,41 @@ export default function App() {
             </div>
 
             <div className="bg-[#1c2d59] border border-indigo-900/50 rounded-3xl p-5 md:p-8 space-y-6 shadow-2xl">
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                setShopResult(null);
-                alert('Instagram дүкенін нақты тексеру үшін серверлік AI және рұқсат етілген дереккөздер қосылуы керек. Бұл нұсқа деректерді ойдан шығармайды.');
-              }} className="space-y-4">
+              
+<form onSubmit={async (e) => {
+  e.preventDefault();
+  setShopResult({ loading: true });
+
+  try {
+    const response = await fetch("/api/analyze-shop", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        shopLink,
+        productName
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Талдау орындалмады");
+    }
+
+    setShopResult({
+      loading: false,
+      ...data
+    });
+  } catch (error) {
+    setShopResult({
+      loading: false,
+      error: error.message
+    });
+  }
+}} className="space-y-4">
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-xs font-medium text-slate-300">Instagram сілтемесі немесе Username</label>
