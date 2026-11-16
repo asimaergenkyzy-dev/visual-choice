@@ -95,6 +95,12 @@ export default async function handler(req, res) {
     }
 
     if (!response.ok) {
+      const errorText = await response.text();
+
+console.error("Gemini API error:", {
+  status: response.status,
+  details: errorText.slice(0, 1000)
+});
       return res.status(502).json({
         error: response.status === 503
           ? "AI қызметі бос емес. Кейінірек қайталап көріңіз."
