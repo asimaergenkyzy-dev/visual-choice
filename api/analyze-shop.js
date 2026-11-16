@@ -74,11 +74,21 @@ JSON форматында жауап бер:
       }
     );
 
-    if (!response.ok) {
-      return res.status(502).json({
-        error: "Gemini қызметінен жауап алу мүмкін болмады."
-      });
-    }
+    
+if (!response.ok) {
+  const errorText = await response.text();
+
+  console.error(
+    "Gemini API қатесі:",
+    response.status,
+    errorText
+  );
+
+  return res.status(502).json({
+    error: `Gemini API қатесі: ${response.status}`
+  });
+}
+
 
     const data = await response.json();
     const text =
