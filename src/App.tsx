@@ -1054,7 +1054,7 @@ export default function App() {
                     <div>
                       <span className="text-xs text-[#22D3EE] font-semibold">{shopResult.shopName}</span>
                       <h3 className="text-xl font-bold text-white">Дүкенді талдау нәтижесі</h3>
-                      <p className="text-xs text-slate-300 mt-0.5">{shopResult.profileDesc}</p>
+                      <p className="text-xs text-slate-300 mt-0.5">{shopResult.summary || "Талдау сипаттамасы қолжетімсіз"}</p>
                     </div>
                     <div className="px-3 py-1.5 bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-xl text-xs font-bold">
                       {shopResult.riskLevel}
@@ -1064,19 +1064,19 @@ export default function App() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div className="bg-[#121c35] p-3 rounded-xl border border-indigo-900/40">
                       <span className="text-[11px] text-slate-400">Оқырмандар</span>
-                      <p className="text-sm font-bold text-white mt-0.5">{shopResult.followers}</p>
+                      <p className="text-sm font-bold text-white mt-0.5">{"Ақпарат қолжетімсіз"}</p>
                     </div>
                     <div className="bg-[#121c35] p-3 rounded-xl border border-indigo-900/40">
                       <span className="text-[11px] text-slate-400">Жарияланым</span>
-                      <p className="text-sm font-bold text-white mt-0.5">{shopResult.postsCount}</p>
+                      <p className="text-sm font-bold text-white mt-0.5">{"Ақпарат қолжетімсіз"}</p>
                     </div>
                     <div className="bg-[#121c35] p-3 rounded-xl border border-indigo-900/40">
                       <span className="text-[11px] text-slate-400">Жиілігі</span>
-                      <p className="text-sm font-bold text-[#22D3EE] mt-0.5">{shopResult.postFrequency}</p>
+                      <p className="text-sm font-bold text-[#22D3EE] mt-0.5">{"Ақпарат қолжетімсіз"}</p>
                     </div>
                     <div className="bg-[#121c35] p-3 rounded-xl border border-indigo-900/40">
                       <span className="text-[11px] text-slate-400">Активтілік</span>
-                      <p className="text-sm font-bold text-white mt-0.5">{shopResult.avgEngagement}</p>
+                      <p className="text-sm font-bold text-white mt-0.5">{"Ақпарат қолжетімсіз"}</p>
                     </div>
                   </div>
 
