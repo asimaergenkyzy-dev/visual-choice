@@ -85,7 +85,7 @@ if (!response.ok) {
   );
 
   return res.status(502).json({
-    error: `Gemini API қатесі: ${response.status}`
+    error: `Gemini API қатесі: ${response.status}. ${errorText.slice(0, 500)}`
   });
 }
 
