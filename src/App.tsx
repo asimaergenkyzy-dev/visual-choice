@@ -372,6 +372,10 @@ export default function App() {
   const [productName, setProductName] = useState('');
   const [shopResult, setShopResult] = useState(null);
 
+const [shopImage, setShopImage] = useState(null);
+const [imageResult, setImageResult] = useState(null);
+const [imageLoading, setImageLoading] = useState(false);
+
   // Real or Manipulated Game state
   const [gameRound, setGameRound] = useState(0);
   const [gameScore, setGameScore] = useState(0);
@@ -1144,7 +1148,124 @@ export default function App() {
 
                 </div>
               )}
-            </div>
+           
+{/* Скриншот арқылы талдау */}
+<div className="mt-8 p-6 bg-[#1c2d59] border border-indigo-500/40 rounded-2xl space-y-4">
+  <h3 className="text-xl font-bold text-white">
+    📸 Скриншот арқылы талдау
+  </h3>
+
+  <p className="text-sm text-slate-300">
+    Instagram дүкенінің немесе жарнаманың скриншотын
+    жүктеп, AI көмегімен талдаңыз.
+  </p>
+
+  <input
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+    className="block w-full text-sm text-slate-200"
+    onChange={(e) => {
+      setShopImage(e.target.files?.[0] || null);
+      setImageResult(null);
+    }}
+  />
+
+  <button
+    type="button"
+    disabled={!shopImage || imageLoading}
+    className="w-full rounded-xl bg-indigo-500 p-3 font-bold text-white disabled:opacity-50"
+    onClick={async () => {
+      if (!shopImage) return;
+
+      if (shopImage.size > 4 * 1024 * 1024) {
+        setImageResult({
+          error: "Сурет көлемі 4 МБ-тан аспауы керек."
+        });
+        return;
+      }
+
+      setImageLoading(true);
+      setImageResult(null);
+
+      try {
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () =>
+            resolve(String(reader.result).split(",")[1]);
+          reader.onerror = reject;
+          reader.readAsDataURL(shopImage);
+        });
+
+        const response = await fetch("/api/analyze-image", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            image: base64,
+            mimeType: shopImage.type
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Талдау қатесі");
+        }
+
+        setImageResult(data);
+      } catch (error) {
+        setImageResult({
+          error: error instanceof Error
+            ? error.message
+            : "Суретті талдау мүмкін болмады."
+        });
+      } finally {
+        setImageLoading(false);
+      }
+    }}
+  >
+    {imageLoading ? "⏳ Талданып жатыр..." : "✨ Суретті AI арқылы талдау"}
+  </button>
+
+  {imageResult && (
+    <div className="bg-[#121c35] rounded-xl p-4 space-y-3 text-sm text-slate-200">
+      {imageResult.error ? (
+        <p className="text-red-300">{imageResult.error}</p>
+      ) : (
+        <>
+          <h4 className="font-bold text-lg text-white">
+            {imageResult.shopName || "Талдау нәтижесі"}
+          </h4>
+          <p>👥 Оқырмандар: {imageResult.followers || "Анықталмады"}</p>
+          <p>📷 Жарияланымдар: {imageResult.posts || "Анықталмады"}</p>
+          <p>📅 Жиілігі: {imageResult.postingFrequency || "Анықталмады"}</p>
+          <p>⚠️ Қауіп деңгейі: {imageResult.riskLevel || "Анықталмаған"}</p>
+          <p>{imageResult.summary}</p>
+
+          <h4 className="font-semibold text-white">Нақты деректер</h4>
+          <ul className="list-disc pl-5">
+            {(imageResult.verifiedFacts || []).map((fact: string, i: number) => (
+              <li key={i}>{fact}</li>
+            ))}
+          </ul>
+
+          <h4 className="font-semibold text-white">Нені тексеру керек?</h4>
+          <ul className="list-disc pl-5">
+            {(imageResult.redFlags || []).map((flag: string, i: number) => (
+              <li key={i}>{flag}</li>
+            ))}
+          </ul>
+
+          <p className="text-indigo-200">
+            {imageResult.recommendations}
+          </p>
+        </>
+      )}
+    </div>
+  )}
+</div>
+ </div>
           </div>
         )}
 
