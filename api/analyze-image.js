@@ -102,11 +102,9 @@ console.error("Gemini API error:", {
   details: errorText.slice(0, 1000)
 });
       return res.status(502).json({
-        error: response.status === 503
-          ? "AI қызметі бос емес. Кейінірек қайталап көріңіз."
-          : "AI талдауы уақытша қолжетімсіз."
-      });
-    }
+  error: `Gemini API қатесі (${response.status})`,
+  details: errorText.slice(0, 500)
+});
 
     const data = await response.json();
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
